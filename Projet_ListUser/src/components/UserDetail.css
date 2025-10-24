@@ -1,0 +1,16 @@
+.user-detail {
+  padding: 20px;
+}
+
+.detail-image {
+  width: 140px;
+  height: 140px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 12px;
+}
+
+.back-btn {
+  margin-bottom: 12px;
+  cursor: pointer;
+}

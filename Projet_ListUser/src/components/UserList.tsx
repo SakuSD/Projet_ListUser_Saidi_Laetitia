@@ -21,7 +21,6 @@ export default function UserList() {
         setLoading(false);
       }
     }
-
     fetchUsers();
   }, []);
 
@@ -29,7 +28,7 @@ export default function UserList() {
   if (error) return <p style={{ color: 'red' }}>Erreur : {error}</p>;
 
   return (
-    <div className="user-list">
+    <div className="user-list-container">
       {users.map(user => (
         <UserCard key={user.id} user={user} />
       ))}

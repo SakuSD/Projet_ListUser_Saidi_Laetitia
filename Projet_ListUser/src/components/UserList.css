@@ -5,3 +5,51 @@
   justify-content: center;  /* centre horizontalement */
   padding: 20px;
 }
+
+/* Wrapper général */
+.user-list-wrapper {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Champ de recherche */
+.search-input {
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Sélecteur de tri */
+.sort-container {
+  margin-bottom: 20px;
+}
+
+.sort-select {
+  padding: 6px;
+  margin-left: 6px;
+  border-radius: 4px;
+}
+
+/* Container des cartes */
+.user-list-container {
+  display: flex;
+  flex-wrap: wrap;         /* passe à la ligne si ça dépasse */
+  gap: 24px;               /* espace entre les cartes */
+  justify-content: center; /* centre horizontalement */
+}
+
+/* Chargement et erreurs */
+.loading {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}

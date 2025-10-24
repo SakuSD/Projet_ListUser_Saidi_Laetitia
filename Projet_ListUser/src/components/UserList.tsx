@@ -10,6 +10,8 @@ export default function UserList() {
 
   useEffect(() => {
     async function fetchUsers() {
+      setLoading(true);
+      setError(null);
       try {
         const res = await fetch('https://dummyjson.com/users');
         if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
@@ -21,10 +23,11 @@ export default function UserList() {
         setLoading(false);
       }
     }
+
     fetchUsers();
   }, []);
 
-  if (loading) return <p>Chargement...</p>;
+  if (loading) return <p>Chargement des utilisateurs...</p>;
   if (error) return <p style={{ color: 'red' }}>Erreur : {error}</p>;
 
   return (

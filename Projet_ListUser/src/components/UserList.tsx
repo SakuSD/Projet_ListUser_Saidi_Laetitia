@@ -9,73 +9,99 @@ export default function UserList() {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'name' | 'age' | ''>('');
-  const [currentPage, setCurrentPage] = useState(1); // ← page actuelle
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const usersPerPage = 10; // ← 10 utilisateurs par page
+  const usersPerPage = 10;
 
-  useEffect(() => {
-    async function fetchUsers() {
+  // 🧠 Fonction séparée pour charger les utilisateurs avec une gestion d’erreur propre
+  async function fetchUsers() {
+    try {
       setLoading(true);
       setError(null);
-      try {
-        const res = await fetch('https://dummyjson.com/users');
-        if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
-        const data = await res.json();
-        setUsers(data.users);
-      } catch (err: any) {
-        setError(err.message || 'Erreur réseau');
-      } finally {
-        setLoading(false);
-      }
-    }
 
+      const res = await fetch('https://dummyjson.com/users');
+
+      // Vérification de la réponse HTTP
+      if (!res.ok) {
+        throw new Error(`Erreur du serveur : ${res.status} ${res.statusText}`);
+      }
+
+      const data = await res.json();
+
+      // Vérification de la structure attendue
+      if (!data.users || !Array.isArray(data.users)) {
+        throw new Error("Les données reçues ne sont pas valides.");
+      }
+
+      setUsers(data.users);
+    } catch (err: any) {
+      // Gestion d’erreurs précises
+      if (err.name === 'TypeError') {
+        setError("Impossible de se connecter à l'API. Vérifiez votre connexion internet.");
+      } else {
+        setError(err.message || "Une erreur inattendue est survenue.");
+      }
+      console.error("Erreur lors du chargement :", err);
+    } finally {
+      // Toujours désactiver le chargement
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
     fetchUsers();
   }, []);
 
-  // Filtrage
+  // 🔎 Filtrage
   const filteredUsers = users.filter(user =>
     (user.firstName ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (user.lastName ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (user.email ?? '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Tri
+  // 🔤 Tri
   const sortedUsers = [...filteredUsers].sort((a, b) => {
     if (sortBy === 'name') return a.firstName.localeCompare(b.firstName);
     if (sortBy === 'age') return (a.age ?? 0) - (b.age ?? 0);
     return 0;
   });
 
-  // Pagination
+  // 📄 Pagination
   const totalPages = Math.ceil(sortedUsers.length / usersPerPage);
   const startIndex = (currentPage - 1) * usersPerPage;
   const paginatedUsers = sortedUsers.slice(startIndex, startIndex + usersPerPage);
 
-  // Changer de page
   const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
+  // 🕐 État de chargement
   if (loading) return <p className="loading">Chargement des utilisateurs...</p>;
-  if (error) return <p className="error">Erreur : {error}</p>;
 
+  // ❌ État d’erreur
+  if (error) {
+    return (
+      <div className="error-container">
+        <p className="error">{error}</p>
+        <button onClick={fetchUsers} className="retry-btn">Réessayer</button>
+      </div>
+    );
+  }
+
+  // ✅ Affichage principal
   return (
     <div className="user-list-wrapper">
-      {/* Champ de recherche */}
       <input
         type="text"
         placeholder="Rechercher par nom, prénom ou email"
         value={searchTerm}
         onChange={(e) => {
           setSearchTerm(e.target.value);
-          setCurrentPage(1); // reset à la première page
+          setCurrentPage(1);
         }}
         className="search-input"
       />
 
-      {/* Sélecteur de tri */}
       <div className="sort-container">
         <label htmlFor="sort">Trier par : </label>
         <select
@@ -93,7 +119,6 @@ export default function UserList() {
         </select>
       </div>
 
-      {/* Liste des cartes */}
       <div className="user-list-container">
         {paginatedUsers.map(user => (
           <UserCard key={user.id} user={user} />

@@ -1,49 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import UserCard from './UserCard';
-import type { User } from '../types/user';
-import './UserList.css';
+import React, { useEffect, useState } from "react";
+import UserCard from "./UserCard";
+import Loader from "./Loader"; // 🌀 Import du spinner
+import type { User } from "../types/user";
+import "./UserList.css";
 
 export default function UserList() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<'name' | 'age' | ''>('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState<"name" | "age" | "">("");
   const [currentPage, setCurrentPage] = useState(1);
 
   const usersPerPage = 10;
 
-  // 🧠 Fonction séparée pour charger les utilisateurs avec une gestion d’erreur propre
+  // 🔄 Chargement des utilisateurs
   async function fetchUsers() {
     try {
       setLoading(true);
       setError(null);
+      const res = await fetch("https://dummyjson.com/users");
 
-      const res = await fetch('https://dummyjson.com/users');
-
-      // Vérification de la réponse HTTP
-      if (!res.ok) {
-        throw new Error(`Erreur du serveur : ${res.status} ${res.statusText}`);
-      }
-
+      if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
       const data = await res.json();
 
-      // Vérification de la structure attendue
       if (!data.users || !Array.isArray(data.users)) {
         throw new Error("Les données reçues ne sont pas valides.");
       }
 
       setUsers(data.users);
     } catch (err: any) {
-      // Gestion d’erreurs précises
-      if (err.name === 'TypeError') {
-        setError("Impossible de se connecter à l'API. Vérifiez votre connexion internet.");
-      } else {
-        setError(err.message || "Une erreur inattendue est survenue.");
-      }
-      console.error("Erreur lors du chargement :", err);
+      setError(err.message || "Erreur inconnue lors du chargement.");
     } finally {
-      // Toujours désactiver le chargement
       setLoading(false);
     }
   }
@@ -53,16 +41,16 @@ export default function UserList() {
   }, []);
 
   // 🔎 Filtrage
-  const filteredUsers = users.filter(user =>
-    (user.firstName ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (user.lastName ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (user.email ?? '').toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUsers = users.filter((user) =>
+    (user.firstName ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (user.lastName ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (user.email ?? "").toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // 🔤 Tri
   const sortedUsers = [...filteredUsers].sort((a, b) => {
-    if (sortBy === 'name') return a.firstName.localeCompare(b.firstName);
-    if (sortBy === 'age') return (a.age ?? 0) - (b.age ?? 0);
+    if (sortBy === "name") return a.firstName.localeCompare(b.firstName);
+    if (sortBy === "age") return (a.age ?? 0) - (b.age ?? 0);
     return 0;
   });
 
@@ -75,15 +63,17 @@ export default function UserList() {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
-  // 🕐 État de chargement
-  if (loading) return <p className="loading">Chargement des utilisateurs...</p>;
+  // 🌀 État de chargement
+  if (loading) return <Loader />;
 
-  // ❌ État d’erreur
+  // ⚠️ État d’erreur
   if (error) {
     return (
       <div className="error-container">
         <p className="error">{error}</p>
-        <button onClick={fetchUsers} className="retry-btn">Réessayer</button>
+        <button onClick={fetchUsers} className="retry-btn">
+          Réessayer
+        </button>
       </div>
     );
   }
@@ -91,6 +81,7 @@ export default function UserList() {
   // ✅ Affichage principal
   return (
     <div className="user-list-wrapper">
+      {/* 🔍 Barre de recherche */}
       <input
         type="text"
         placeholder="Rechercher par nom, prénom ou email"
@@ -102,13 +93,14 @@ export default function UserList() {
         className="search-input"
       />
 
+      {/* 🔽 Menu déroulant de tri */}
       <div className="sort-container">
-        <label htmlFor="sort">Trier par : </label>
+        <label htmlFor="sort">Trier par :</label>
         <select
           id="sort"
           value={sortBy}
           onChange={(e) => {
-            setSortBy(e.target.value as 'name' | 'age' | '');
+            setSortBy(e.target.value as "name" | "age" | "");
             setCurrentPage(1);
           }}
           className="sort-select"
@@ -119,13 +111,14 @@ export default function UserList() {
         </select>
       </div>
 
+      {/* 👥 Liste des utilisateurs */}
       <div className="user-list-container">
-        {paginatedUsers.map(user => (
+        {paginatedUsers.map((user) => (
           <UserCard key={user.id} user={user} />
         ))}
       </div>
 
-      {/* Pagination */}
+      {/* 🔢 Pagination */}
       <div className="pagination">
         <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
           ◀ Précédent
@@ -135,7 +128,7 @@ export default function UserList() {
           <button
             key={index}
             onClick={() => goToPage(index + 1)}
-            className={currentPage === index + 1 ? 'active' : ''}
+            className={currentPage === index + 1 ? "active" : ""}
           >
             {index + 1}
           </button>

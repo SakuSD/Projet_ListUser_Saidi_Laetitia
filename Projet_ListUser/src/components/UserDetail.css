@@ -1,16 +1,45 @@
 .user-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 20px;
-}
-
-.detail-image {
-  width: 140px;
-  height: 140px;
   border-radius: 12px;
-  object-fit: cover;
-  margin-bottom: 12px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
 }
 
+/* 🖼️ Image */
+.user-detail img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 16px;
+}
+
+/* 🔙 Bouton retour */
 .back-btn {
-  margin-bottom: 12px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  margin-bottom: 20px;
   cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.back-btn:hover {
+  background-color: #2563eb;
+  transform: scale(1.05);
+}
+
+/* Adaptation aux thèmes */
+body.light .back-btn {
+  background-color: #2563eb;
+}
+
+body.dark .back-btn {
+  background-color: #1e3a8a;
 }

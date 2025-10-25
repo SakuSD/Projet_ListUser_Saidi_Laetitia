@@ -1,35 +1,64 @@
+/* 🌈 Variables globales pour les deux thèmes */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --bg-color: #f9fafb;
+  --text-color: #111827;
+  --card-bg: #ffffff;
+  --border-color: #d1d5db;
+
+  --button-bg: #4281ff;
+  --button-bg-hover: #3065c6;
+  --button-text: #ffffff;
+
+  --input-bg: #ffffff;
+  --input-text: #111827;
+  --input-border: #d1d5db;
+
+  --accent-color: #41c660;
+  --accent-hover: #04684c;
+  --error-color: #ef4444;
 }
 
+/* 🌙 Mode sombre */
+body.dark {
+  --bg-color: #1f2937;
+  --text-color: #f9fafb;
+  --card-bg: #374151;
+  --border-color: #4b5563;
+
+  --button-bg: #2563eb;
+  --button-bg-hover: #1d4ed8;
+  --button-text: #f9fafb;
+
+  --input-bg: #4b5563;
+  --input-text: #f9fafb;
+  --input-border: #6b7280;
+
+  --accent-color: #16a34a;
+  --accent-hover: #15803d;
+  --error-color: #f87171;
+}
+
+/* 🌍 Styles globaux */
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* 🌞 Thème clair */
-body.light {
-  background-color: #f9fafb;
-  color: #111827;
+#root {
+  width: 100%;
+  max-width: 1280px;
+  padding: 2rem;
 }
 
-/* 🌙 Thème sombre */
-body.dark {
-  background-color: #1f2937;
-  color: #f9fafb;
-}
-
-/* Bouton du thème */
+/* 🌗 Bouton du thème */
 .theme-toggle-btn {
   position: fixed;
   top: 20px;

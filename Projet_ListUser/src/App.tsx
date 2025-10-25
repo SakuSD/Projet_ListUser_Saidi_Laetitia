@@ -1,18 +1,21 @@
-import React from 'react';
-import UserList from './components/UserList';
-import { useTheme } from './context/ThemeContext';
+import { Routes, Route } from "react-router-dom";
+import UserList from "./components/UserList";
+import UserDetail from "./components/UserDetail";
+import { useTheme } from "./context/ThemeContext";
 
 export default function App() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <div style={{ padding: 20 }}>
+    <div>
       <button className="theme-toggle-btn" onClick={toggleTheme}>
-        🌞 / 🌙 Mode {theme === 'light' ? 'sombre' : 'clair'}
+        {theme === "light" ? "🌙 Mode sombre" : "☀️ Mode clair"}
       </button>
 
-      <h1>Liste des utilisateurs</h1>
-      <UserList />
+      <Routes>
+        <Route path="/" element={<UserList />} />
+        <Route path="/user/:id" element={<UserDetail />} />
+      </Routes>
     </div>
   );
 }

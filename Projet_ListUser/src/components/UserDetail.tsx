@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import type { User } from '../types/user';
+import './UserDetail.css';
 
 export default function UserDetail() {
   const { id } = useParams<{ id: string }>();
@@ -30,8 +31,13 @@ export default function UserDetail() {
   if (!user) return <p>Aucun utilisateur trouvé</p>;
 
   return (
-    <div style={{ padding: 20 }}>
-      <button onClick={() => navigate(-1)}>← Retour à la liste</button>
+    <div className="user-detail">
+      <button className="back-btn" onClick={() => navigate(-1)}>
+        ← Retour à la liste
+      </button>
+
+      <img src={user.image} alt={`${user.firstName}`} />
+
       <h2>{user.firstName} {user.lastName}</h2>
       <p>Email : {user.email}</p>
       <p>Âge : {user.age}</p>

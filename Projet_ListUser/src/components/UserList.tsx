@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import UserCard from "./UserCard";
-import Loader from "./Loader"; // 🌀 Import du spinner
+import Loader from "./Loader";
 import type { User } from "../types/user";
 import "./UserList.css";
 
@@ -30,8 +30,7 @@ export default function UserList() {
 
       setUsers(data.users);
     } catch (err: any) {
-      // 🔎 Détection des erreurs réseau
-      if (err.message.includes("Connexion perdue") || !navigator.onLine) {
+      if (err.message.includes("Failed to fetch") || !navigator.onLine) {
         setError("Connexion perdue. Vérifiez votre réseau Internet.");
       } else {
         setError(err.message || "Erreur inconnue lors du chargement.");
@@ -45,24 +44,33 @@ export default function UserList() {
     fetchUsers();
   }, []);
 
-  // 🔎 Filtrage
-  const filteredUsers = users.filter((user) =>
-    (user.firstName ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (user.lastName ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (user.email ?? "").toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // 🔎 Filtrage optimisé
+  const filteredUsers = useMemo(() => {
+    return users.filter((user) =>
+      (user.firstName ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.lastName ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.email ?? "").toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [users, searchTerm]);
 
-  // 🔤 Tri
-  const sortedUsers = [...filteredUsers].sort((a, b) => {
-    if (sortBy === "name") return a.firstName.localeCompare(b.firstName);
-    if (sortBy === "age") return (a.age ?? 0) - (b.age ?? 0);
-    return 0;
-  });
+  // 🔤 Tri optimisé
+  const sortedUsers = useMemo(() => {
+    const sorted = [...filteredUsers];
+    if (sortBy === "name") {
+      sorted.sort((a, b) => a.firstName.localeCompare(b.firstName));
+    } else if (sortBy === "age") {
+      sorted.sort((a, b) => (a.age ?? 0) - (b.age ?? 0));
+    }
+    return sorted;
+  }, [filteredUsers, sortBy]);
 
-  // 📄 Pagination
+  // 📄 Pagination optimisée
+  const paginatedUsers = useMemo(() => {
+    const startIndex = (currentPage - 1) * usersPerPage;
+    return sortedUsers.slice(startIndex, startIndex + usersPerPage);
+  }, [sortedUsers, currentPage, usersPerPage]);
+
   const totalPages = Math.ceil(sortedUsers.length / usersPerPage);
-  const startIndex = (currentPage - 1) * usersPerPage;
-  const paginatedUsers = sortedUsers.slice(startIndex, startIndex + usersPerPage);
 
   const goToPage = (page: number) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);

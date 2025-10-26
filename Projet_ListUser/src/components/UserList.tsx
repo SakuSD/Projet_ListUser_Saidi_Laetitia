@@ -30,7 +30,12 @@ export default function UserList() {
 
       setUsers(data.users);
     } catch (err: any) {
-      setError(err.message || "Erreur inconnue lors du chargement.");
+      // 🔎 Détection des erreurs réseau
+      if (err.message.includes("Connexion perdue") || !navigator.onLine) {
+        setError("Connexion perdue. Vérifiez votre réseau Internet.");
+      } else {
+        setError(err.message || "Erreur inconnue lors du chargement.");
+      }
     } finally {
       setLoading(false);
     }
@@ -70,7 +75,7 @@ export default function UserList() {
   if (error) {
     return (
       <div className="error-container">
-        <p className="error">{error}</p>
+        <p className="error-message">❌ {error}</p>
         <button onClick={fetchUsers} className="retry-btn">
           Réessayer
         </button>

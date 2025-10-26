@@ -1,8 +1,22 @@
+/* 🌟 Apparition progressive du contenu */
 .user-list-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Animation fade-in générale */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 🔍 Barre de recherche */
@@ -15,16 +29,23 @@
   border-radius: 6px;
   background-color: var(--input-bg);
   color: var(--input-text);
-  transition: all 0.3s;
+  transition: all 0.3s ease;
 }
 
 .search-input::placeholder {
   color: #9ca3af;
 }
 
+.search-input:focus {
+  box-shadow: 0 0 6px var(--accent-color);
+  border-color: var(--accent-color);
+  transform: scale(1.02);
+}
+
 /* 📊 Sélecteur de tri */
 .sort-container {
   margin-bottom: 20px;
+  transition: all 0.3s ease;
 }
 
 .sort-select {
@@ -34,6 +55,12 @@
   border: 1px solid var(--input-border);
   background-color: var(--input-bg);
   color: var(--input-text);
+  transition: all 0.3s ease;
+}
+
+.sort-select:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
 }
 
 /* 🧱 Conteneur de cartes */
@@ -42,6 +69,7 @@
   flex-wrap: wrap;
   gap: 24px;
   justify-content: center;
+  animation: fadeIn 0.8s ease;
 }
 
 /* ⚠️ Conteneur centré pour les erreurs */
@@ -53,9 +81,10 @@
   height: 80vh;
   text-align: center;
   gap: 20px;
+  animation: fadeIn 0.8s ease;
 }
 
-/* 🟥 Message d’erreur grand et clignotant */
+/* 🟥 Message d’erreur grand et clignotant (texte uniquement) */
 .error-message {
   font-size: 2rem;
   font-weight: 700;
@@ -68,7 +97,6 @@
   animation: fadeInOut 2s infinite ease-in-out;
 }
 
-/* ✨ Animation uniquement pour le texte */
 @keyframes fadeInOut {
   0%, 100% {
     opacity: 0.3;
@@ -128,10 +156,16 @@ body.dark .retry-btn:hover {
   padding: 6px 10px;
   cursor: pointer;
   color: var(--button-text);
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
 }
 
 .pagination button.active {
+  background-color: var(--accent-hover);
+  transform: scale(1.1);
+}
+
+.pagination button:hover:not(:disabled) {
+  transform: scale(1.1);
   background-color: var(--accent-hover);
 }
 
@@ -139,4 +173,5 @@ body.dark .retry-btn:hover {
   background-color: var(--border-color);
   color: #9ca3af;
   cursor: not-allowed;
+  transform: none;
 }

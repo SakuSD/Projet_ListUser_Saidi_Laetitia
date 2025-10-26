@@ -1,25 +1,17 @@
-.user-detail {
+.user-detail-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  border-radius: 12px;
-  background-color: var(--card-bg);
   color: var(--text-color);
+  background-color: var(--card-bg);
+  border-radius: 12px;
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* 🖼️ Image */
-.user-detail img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 16px;
-}
-
-/* 🔙 Bouton retour */
+/* 🔙 Bouton retour à gauche */
 .back-btn {
+  align-self: flex-start; /* ✅ bouton à gauche */
   background-color: #3b82f6;
   color: white;
   border: none;
@@ -35,11 +27,50 @@
   transform: scale(1.05);
 }
 
-/* Adaptation aux thèmes */
-body.light .back-btn {
-  background-color: #2563eb;
+/* 🖼️ Image centrée */
+.user-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 16px;
 }
 
-body.dark .back-btn {
-  background-color: #1e3a8a;
+/* Cartes des informations */
+.info-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+.info-card {
+  flex: 1 1 300px;
+  background-color: var(--card-bg-light);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.info-card h3 {
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.info-card p {
+  margin-bottom: 6px;
+}
+
+/* Thèmes */
+body.light .info-card {
+  background-color: #f9fafb;
+}
+
+body.dark .info-card {
+  background-color: #1f2937;
+  color: #f3f4f6;
 }

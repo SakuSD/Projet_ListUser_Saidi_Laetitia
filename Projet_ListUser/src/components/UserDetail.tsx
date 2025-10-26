@@ -31,29 +31,40 @@ export default function UserDetail() {
   if (!user) return <p>Aucun utilisateur trouvé</p>;
 
   return (
-    <div className="user-detail">
+    <div className="user-detail-page">
       <button className="back-btn" onClick={() => navigate(-1)}>
         ← Retour à la liste
       </button>
 
-      <img src={user.image} alt={`${user.firstName}`} />
-
+      <img src={user.image} alt={`${user.firstName}`} className="user-image" />
       <h2>{user.firstName} {user.lastName}</h2>
-      <p>Email : {user.email}</p>
-      <p>Âge : {user.age}</p>
-      <p>Téléphone : {user.phone}</p>
-      <p>Adresse : {user.address?.address}, {user.address?.city}, {user.address?.postalCode}</p>
-      <p>Société : {user.company?.name} — {user.company?.title}</p>
-      <p>Username : {user.username}</p>
-      <p>IP : {user.ip}</p>
-      <p>Domain : {user.domain}</p>
-      <p>Université : {user.university}</p>
-      {user.bank && (
-        <>
-          <p>Banque : {user.bank.name}</p>
-          <p>IBAN : {user.bank.iban}</p>
-        </>
-      )}
+
+      <div className="info-cards">
+        {/* Informations personnelles */}
+        <div className="info-card">
+          <h3>Informations personnelles</h3>
+          <p><strong>Email :</strong> {user.email}</p>
+          <p><strong>Âge :</strong> {user.age}</p>
+          <p><strong>Username :</strong> {user.username}</p>
+          <p><strong>Téléphone :</strong> {user.phone}</p>
+        </div>
+
+        {/* Informations professionnelles */}
+        <div className="info-card">
+          <h3>Informations professionnelles</h3>
+          <p><strong>Adresse :</strong> {user.address?.address}, {user.address?.city}, {user.address?.postalCode}</p>
+          <p><strong>Société :</strong> {user.company?.name} — {user.company?.title}</p>
+          <p><strong>IP :</strong> {user.ip}</p>
+          <p><strong>Domaine :</strong> {user.domain}</p>
+          <p><strong>Université :</strong> {user.university}</p>
+          {user.bank && (
+            <>
+              <p><strong>Banque :</strong> {user.bank.name}</p>
+              <p><strong>IBAN :</strong> {user.bank.iban}</p>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
